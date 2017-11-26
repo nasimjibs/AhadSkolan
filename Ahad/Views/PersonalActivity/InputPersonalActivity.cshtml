@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Ahad.Models.PersonalActivityList>
+
+@{
+    int count = 0;
+    ViewBag.Title = "InputPersonalActivity";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<h2>InputPersonalActivity</h2>
+
+@using (Html.BeginForm())
+{
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ActivityTitle)
+        </th>
+        <th></th>
+    </tr>
+   
+
+    @foreach (var item in Model)
+    {
+        
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActivityTitle)
+            </td>
+            
+            <td>
+                <input type="hidden" name="itemid[@count]" value="@item.PersonalActivityId"/>
+                @if (item.TypeId == 1)
+                {
+                    <input type="text" name="item[@count]" />
+                }
+                else if (item.TypeId == 2)
+                {
+                   
+                     <input type='checkbox' value='0' name='item[@count]' id="check">
+                    
+
+                }
+                else
+                {
+                    <input type="number" name="item[@count]" />
+                }
+               
+            </td>
+        </tr>
+        count++;
+    }
+    <tr>
+        <td>
+            <input type="submit" name="submit" value="submit" />
+        </td>
+    </tr>
+   
+</table>
+}
+
+<script >
+
+    jQuery("#check").click(function (e) {
+        
+        if (document.getElementById("check").checked) {
+            $("#check").val("1");
+        }else{
+            $("#check").val("0");
+
+        }
+
+   });
+</script>

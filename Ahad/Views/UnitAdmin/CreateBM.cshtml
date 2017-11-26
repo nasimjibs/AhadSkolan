@@ -1,0 +1,201 @@
+﻿@model  Tuple<IEnumerable<Ahad.Models.PersonalBM>, Ahad.Models.PersonalBM>
+
+@{
+    ViewBag.Title = "CreateBM";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+
+<link href="~/Content/Table.css" rel="stylesheet" />
+<div class="panel panel-default " style="margin-right:10px; margin-left:10px;">
+    <div class=" panel-heading"><h3>Create BM</h3></div>
+    <div class="panel-body">
+        <div id="no-more-tables">
+            <table class="col-md-12 table-bordered table-striped table-condensed cf">
+                <thead class="cf">
+                    <tr>
+                       
+                        <th>
+                            @Html.DisplayName("Payment Date")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Name")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Payment Type")
+                        </th>
+
+                        <th>
+                            @Html.DisplayName("Amount")
+                        </th>
+                        <th></th>
+                    </tr>
+
+                </thead>
+                <tbody>
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationSummary(true)
+                        @Html.HiddenFor(model => model.Item2.UserId, new { id = "UserId" })
+
+                        <tr>
+                            <td>                            
+                                @Html.TextBoxFor(model => model.Item2.PaymentDate, new { @class = "form-control", id = "datepicker" })
+                                                                   
+                            </td>
+                            <td>
+                              
+                                 @Html.TextBox("DisplayName", null, new { onchange = "OnChangeEvent()", @class = " form-control", id = "MemberName" })                                                                  
+                            </td>
+                            
+                            <td>
+                                
+                                @Html.DropDownListFor(model => model.Item2.PaymentTypeId, ViewBag.PaymentType as SelectList, new { @class = "form-control" })
+
+                                   
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(model => model.Item2.CollectedAmount, new { @class = "form-control" })
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <input type="submit" value="Create" class="btn btn-default" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+
+
+                    @foreach (var item in Model.Item1)
+                    {
+                        <tr>
+                            <td>
+
+                                @Html.DisplayFor(modelItem => item.PaymentDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Useers.FirstName)
+                                @Html.DisplayFor(modelItem => item.Useers.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PaymentTypes.Type )
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CollectedAmount)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "BMEdit", new { id = item.Id}) |
+                                <button class="btn btn-xs btn-danger deleteItem" type="button" data-target="#basic" data-toggle="modal" data-id="@item.Id" data-title="Delete User" data-message="Are you sure you want to delete this user ?">
+                                    <i class="glyphicon glyphicon-trash"></i> Delete
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+@{
+    <script type="text/javascript">
+
+        function OnChangeEvent() {
+            if ($('#UserId').val() == '')
+                $('#MemberName').val('')
+
+        }
+
+        $(document).ready(function () {
+            var $searchBox = $('#MemberName');
+            $searchBox.autocomplete({
+
+                source: function (request, response) {
+                    $('#UserId').val(''),
+
+                 $.ajax({
+                     url: "/UnitAdmin/INameAutoComplite",
+                     type: "POST",
+                     dataType: "json",
+                     data: { term: request.term },
+                     success: function (data) {
+                         response($.map(data, function (item) {
+
+                             return {
+                                 label: item.FirstName + " " + item.LastName,
+                                 value1: item.UserId
+
+                             };
+
+                         }))
+
+                     }
+                 })
+                },
+                messages: {
+                    noResults: "", results: ""
+                },
+                minLength: 1,
+                select: function (event, ui) {
+
+                    $(this).val(ui.item.label);
+                    $('#UserId').val(ui.item.value1);
+
+                    return false;
+                }
+
+            });
+        })
+    </script>
+}
+
+
+<div class="modal fade" id="basic" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Delete Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this item?
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" type="button" class="btn btn-default">Cancel</button>
+                <button id="btnContinueDelete" type="button" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+
+    var item_to_delete;
+    $(".deleteItem").click(function (e) {
+
+        item_to_delete = $(this).data('id');
+
+    });
+    $("#btnContinueDelete").click(function (e) {
+
+        window.location = "/UnitAdmin/BMDelete/" + item_to_delete;
+    });
+
+
+
+</script>
+
+
+<script>
+    $(function () {
+        $("#datepicker").datepicker().datepicker("option", "dateFormat", 'dd-mm-yy');
+    });
+</script>

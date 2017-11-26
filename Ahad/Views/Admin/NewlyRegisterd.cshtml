@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Ahad.Models.Useer>
+
+@{
+    ViewBag.Title = "NewlyRegisterd";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<link href="~/Content/Table.css" rel="stylesheet" />
+<div class="panel panel-default " style="margin-right:10px; margin-left:10px;">
+    <div class=" panel-heading"><h3>Newly Registerd</h3></div>
+
+    <div class="panel-body">
+        <div id="no-more-tables">
+            <table class="col-md-12 table-bordered table-striped table-condensed cf">
+                <thead class="cf">
+                    <tr>
+                        <th>@Html.DisplayName("Name")</th>
+                        <th>@Html.DisplayNameFor(model => model.PhoneNo)</th>
+                        <th>@Html.DisplayNameFor(model => model.Address)</th>
+                        <th >@Html.DisplayName("Designation")</th>
+                        <th >@Html.DisplayName("Role")</th>
+                        <th >@Html.DisplayName("Unit")</th>
+                        <th ></th>
+                    </tr>
+                </thead>
+
+
+
+                <tbody>
+
+
+                    @foreach (var item in  Model.ToList())
+                    {
+                          @Html.HiddenFor(modelItem => item.UserId, new { id = "UserId" })
+                        @Html.HiddenFor(modelItem => item.FirstName)
+                        @Html.HiddenFor(modelItem => item.LastName)
+                         @Html.HiddenFor(modelItem => item.Password)
+                        @Html.HiddenFor(modelItem => item.PhoneNo)
+                         @Html.HiddenFor(modelItem => item.PositionId)
+                        @Html.HiddenFor(modelItem => item.RoleId)
+                         @Html.HiddenFor(modelItem => item.UnitId)
+                        @Html.HiddenFor(modelItem => item.Email)
+                         @Html.HiddenFor(modelItem => item.Address)
+
+                        @Html.HiddenFor(modelItem => item.Active)
+                        
+                        <tr>
+                            <td data-title="Name">@Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)</td>
+                            <td data-title="Phone No">@Html.DisplayFor(modelItem => item.PhoneNo)</td>
+                            <td data-title="Address">@Html.DisplayFor(modelItem => item.Address)</td>
+                            
+                            
+                            <td data-title="Designation">@Html.DropDownListFor(modelItem => item.PositionId, ViewBag.Position as SelectList, new { @class = "form-control", id = "PositionId" + @item.UserId })</td>
+                            <td data-title="Role">@Html.DropDownListFor(modelItem => item.RoleId, ViewBag.Role as SelectList, new { @class = "form-control", id = "RoleId"+@item.UserId })</td>
+                            <td data-title="Unit ">@Html.DropDownListFor(modelItem => item.UnitId, ViewBag.Unit as SelectList, new { @class = "form-control", id = "UnitId" + @item.UserId })</td>
+                            <td data-title="" ><input type="submit" value="confirm" id="@item.UserId" class="btn btn-success confirm" onclick='mytest(this);' /></td>
+
+                        </tr>
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    </div>
+<script type="text/javascript">
+
+
+
+    $(".confirm").click(function (e) {
+      
+        var UserId = $(this).attr('id');
+        var Unit = document.getElementById('UnitId' + UserId);
+        var Role = document.getElementById('RoleId' + UserId);
+        var Position = document.getElementById('PositionId' + UserId);
+       
+        window.location = "/Admin/ConfirmNewlyRegisterd?roleId=" + Role.value + "&positionId=" + Position.value + "&unitId=" + Unit.value + "&userId=" + UserId;
+
+    });
+</script>

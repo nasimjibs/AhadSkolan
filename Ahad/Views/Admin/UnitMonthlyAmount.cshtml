@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Ahad.Models.Unit>
+
+@{
+    ViewBag.Title = "UnitMonthlyAmount";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+    decimal? TotalAmount = 0;
+}
+
+
+<div class="panel panel-default " style="margin-right:10px; margin-left:10px;">
+    <div class=" panel-heading"><h3>Unit Monthly Fixed Amount</h3></div>
+
+
+    <div class="panel-body">
+
+      
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FixedAmount)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                TotalAmount = TotalAmount + item.FixedAmount ;
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FixedAmount)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "UnitMonthlyAmountEdit", new { id = item.UnitId })
+                    </td>
+                </tr>
+            }
+
+            <tr>
+
+                
+                <td><h4>Total Amount</h4></td>
+                <td>
+                   <h4>@TotalAmount</h4> 
+                </td>
+                <td></td>
+            </tr>
+
+        </table>
+</div>
+</div>

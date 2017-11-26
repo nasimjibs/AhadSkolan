@@ -1,0 +1,41 @@
+﻿@model Ahad.Models.Unit
+
+@{
+    ViewBag.Title = "UnitEdit";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<div class="panel panel-default " style="margin-right:10px; margin-left:10px;">
+    <div class=" panel-heading"><h3>Edit Unit</h3></div>
+
+
+    <div class="panel-body">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+              
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.UnitId)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div>
+            @Html.ActionLink("Back to List", "UnitList")
+        </div>
+    </div>
+</div>

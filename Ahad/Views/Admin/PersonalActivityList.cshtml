@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Ahad.Models.PersonalActivityList>
+@{
+    ViewBag.Title = "PersonalActivityList";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+
+
+<div class="panel panel-default " style="margin-right:10px; margin-left:10px;">
+    <div class="panel-heading"><h3>Personal Activity List</h3>  @Html.ActionLink("Create New Activity", "CreateActivity")</div>
+
+
+    <div class="panel-body">
+       
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ActivityTitle)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ActivityTitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ActivityTypes.Type)
+                    </td>
+
+                    <td>
+                        @Html.ActionLink("Edit", "ActivityEdit", new { id = item.PersonalActivityListId }) |
+                        @Html.ActionLink("Delete", "ActivityDelete", new { id = item.PersonalActivityListId })
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+
+    </div>
+</div>

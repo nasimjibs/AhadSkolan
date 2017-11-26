@@ -1,0 +1,126 @@
+﻿@model Ahad.Models.Event
+
+@{
+    ViewBag.Title = "EventEdit";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<div class="panel panel-default " style="margin-right:10px; margin-left:10px;">
+    <div class=" panel-heading"><h3>Edit Event</h3></div>
+
+
+    <div class="panel-body">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+               
+                <hr />
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.EventId)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EventDate, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.EventDate, "{0:dd-MM-yy}", new { @class = "form-control", id = "datepicker", required = string.Empty })
+                        @Html.ValidationMessageFor(model => model.EventDate)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EventCategoryId, "EventCategoryId", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.EventCategoryId, ViewBag.EventCategories as SelectList, new { @class = "form-control", id = "EventCategoryId" })
+                        @Html.ValidationMessageFor(model => model.EventCategoryId)
+                    </div>
+                </div>
+
+                <div class="form-group ">
+                    @Html.LabelFor(model => model.EventListId, "EventListId", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.EventListId, ViewBag.EventList as SelectList, new { @class = "form-control", id = "EventListId" })
+                        @Html.ValidationMessageFor(model => model.EventListId)
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ParticipantNumber, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.ParticipantNumber, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ParticipantNumber)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div>
+            @Html.ActionLink("Back to List", "EventList")
+        </div>
+        </div>
+    </div>
+
+
+        @section Scripts {
+
+
+            <script type="text/javascript">
+
+
+                $(function () {
+
+                    $("#EventCategoryId").change(function () {
+                        var selectedItem = $(this).val();
+                        var ddlStates = $("#EventListId");
+                        var statesProgress = $("#states-loading-progress");
+                        statesProgress.show();
+                        $.ajax({
+                            cache: false,
+                            type: "Post",
+                            url: "/UnitAdmin/GetEventListByCategoryId",
+                            data: { "ctgId": selectedItem },
+                            success: function (data) {
+                                ddlStates.html('');
+                                $.each(data, function (id, option) {
+                                    ddlStates.append('<option value="' + option.id + '">' + option.name + '</option>');
+                                });
+
+                                statesProgress.hide();
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                alert('Failed to retrieve states.');
+                                statesProgress.hide();
+                            }
+                        });
+                    });
+                });
+
+
+
+            </script>
+
+
+
+
+
+
+        }
+
+        <script>
+            $(function () {
+                $("#datepicker").datepicker({
+                    dateFormat: 'dd-mm-yy',
+
+                }).val();
+            });
+           
+        </script>

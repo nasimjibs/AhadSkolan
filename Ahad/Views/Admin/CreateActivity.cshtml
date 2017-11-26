@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "Create Activity";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+
+@model Ahad.Models.PersonalActivityList
+
+@{
+    ViewBag.Title = "CreateActivity";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+
+<div class="panel panel-default " style="margin-right:10px; margin-left:10px;">
+    <div class="panel-heading"><h3>Create Activity </h3></div>
+
+
+    <div class="panel-body">
+        @using (Html.BeginForm("CreateActivity", "Admin", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ActivityTitle, new { @class = "control-label col-md-2" })
+                    <div class="col-md-6">
+                        @Html.TextBoxFor(model => model.ActivityTitle, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ActivityTitle)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Activity Type", new { @class = "control-label col-md-2" })
+
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(model => model.TypeId, ViewBag.ActivityType as SelectList, new { @class = "form-control" })
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div>
+            @Html.ActionLink("Back to Activity List", "PersonalActivityList")
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

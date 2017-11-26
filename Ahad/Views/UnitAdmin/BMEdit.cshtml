@@ -1,0 +1,132 @@
+﻿@model Ahad.Models.PersonalBM
+
+@{
+    ViewBag.Title = "BMEdit";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<div class="panel panel-default " style="margin-right:10px; margin-left:10px;">
+    <div class=" panel-heading"><h3>Edit Member BM</h3></div>
+
+
+    <div class="panel-body">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                
+                <hr />
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.UserId, new { id = "UserId" })
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PaymentDate, "Payment Date", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.PaymentDate, "{0:dd-MM-yy}", new { @class = "form-control", id = "datepicker" })
+
+                        @Html.ValidationMessageFor(model => model.PaymentDate)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UserId, "Name", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.Useers.FirstName, null, new { onchange = "OnChangeEvent()", @class = " form-control", id = "MemberName" })
+                        @Html.ValidationMessageFor(model => model.UserId)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PaymentTypeId, "Payment Type", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.PaymentTypeId, ViewBag.PaymentType as SelectList, new { @class = "form-control" })
+
+                        @Html.ValidationMessageFor(model => model.PaymentTypeId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CollectedAmount, "Amount", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.CollectedAmount, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CollectedAmount)
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div>
+            @Html.ActionLink("Back to List", "CreateBM")
+        </div>
+        </div>
+    </div>
+
+        @{
+            <script type="text/javascript">
+
+                function OnChangeEvent() {
+                    if ($('#UserId').val() == '')
+                        $('#MemberName').val('')
+
+                }
+
+                $(document).ready(function () {
+                    var $searchBox = $('#MemberName');
+                    $searchBox.autocomplete({
+
+                        source: function (request, response) {
+                            $('#UserId').val(''),
+
+                         $.ajax({
+                             url: "/UnitAdmin/INameAutoComplite",
+                             type: "POST",
+                             dataType: "json",
+                             data: { term: request.term },
+                             success: function (data) {
+                                 response($.map(data, function (item) {
+
+                                     return {
+                                         label: item.FirstName + " " + item.LastName,
+                                         value1: item.UserId
+
+                                     };
+
+                                 }))
+
+                             }
+                         })
+                        },
+                        messages: {
+                            noResults: "", results: ""
+                        },
+                        minLength: 1,
+                        select: function (event, ui) {
+
+                            $(this).val(ui.item.label);
+                            $('#UserId').val(ui.item.value1);
+
+                            return false;
+                        }
+
+                    });
+                })
+            </script>
+        }
+
+        <script>
+            $(function () {
+                $("#datepicker").datepicker({
+                    dateFormat: 'dd-mm-yy',
+
+                }).val();
+            });
+
+        </script>

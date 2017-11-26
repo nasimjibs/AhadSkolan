@@ -1,0 +1,101 @@
+﻿@model IEnumerable<Ahad.Models.PersonalBM>
+
+@{
+    ViewBag.Title = "BMList";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+
+@Html.ActionLink("LogOff", "Logout", "Account")
+<link href="~/Content/Table.css" rel="stylesheet" />
+<div class="panel panel-default " style="margin-right:10px; margin-left:10px;">
+    <div class=" panel-heading"><h3>BM Payment List</h3></div>
+    <hr />
+    <div>
+        @Html.TextBox("date", null, new { @class = " form-control", id = "datepicker", required = string.Empty })
+    </div>
+    <hr />
+    <div class="panel-body">
+        <div id="no-more-tables">
+            <table class="col-md-12 table-bordered table-striped table-condensed cf">
+                <thead class="cf">
+                    <tr>
+                        <th>
+                            @Html.DisplayName("Payment Date")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Name")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Payment Type")
+                        </th>
+
+                        <th>
+                            @Html.DisplayName("Amounts")
+                        </th>
+
+
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PaymentDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Useers.FirstName)
+                                @Html.DisplayFor(modelItem => item.Useers.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PaymentTypes.Type)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CollectedAmount)
+                            </td>
+
+                        </tr>
+                    }
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+
+
+    $(function () {
+        $('#datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            dateFormat: 'MM yy',
+            onClose: function (dateText, inst) {
+                var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                $(this).datepicker('setDate', new Date(year, month, 1));
+                var date = $("#datepicker").val();
+
+
+                window.location = "/UnitAdmin/BMList?date=" + date;;
+            }
+        });
+    });
+
+    $("#view").click(function (e) {
+
+        var date = $("#datepicker").val();
+
+
+        window.location = "/UnitAdmin/BMList?date=" + date;;
+
+    });
+</script>
+<style>
+    .ui-datepicker-calendar {
+        display: none;
+    }
+</style>

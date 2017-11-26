@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewBag.Title = "Menu";
+    Layout = null;
+}
+
+
+
+            <ul class="sidebar-nav nav nav-tabs" >
+                <li class="sidebar-brand">
+                    <a href="#">
+                        
+                    </a>
+                </li>
+                <li >
+                    <a href="#dashboard">Home</a>
+                </li>
+               
+              
+             @if(User.IsInRole("Admin"))
+             {
+                <li>
+                    @Html.RouteLink("Unit Fixed Amount", new
+                                {
+                                    controller = "Admin",
+                                    action = "UnitMonthlyAmount"
+
+                                }
+                               )
+                </li>
+                   <li>
+                    @Html.RouteLink("Newly Registerd", new
+                                {
+                                    controller = "Admin",
+                                    action = "NewlyRegisterd"
+
+                                }
+                               )
+                </li>
+                  <li>
+                   
+                  @Html.RouteLink("Unit List", new
+                                {
+                                    controller = "Admin",
+                                    action = "UnitList"
+
+                                }
+                               )
+                </li>
+
+                <li>
+                    @Html.RouteLink("Create Personal Activity", new
+               {
+                   controller = "Admin",
+                   action = "CreateActivity"
+
+               }
+                               )
+                </li>
+                <li>
+                    @Html.RouteLink("Personal Activity List", new
+               {
+                   controller = "Admin",
+                   action = "PersonalActivityList"
+
+               }
+                               )
+                </li>
+             }
+                @if (User.IsInRole("UnitAdmin"))
+                {
+                      <li>
+                        @Html.RouteLink("Create Member BM", new
+                                {
+                                    controller = "UnitAdmin",
+                                    action = "CreateBM"
+
+                                }
+                               )
+                    </li>
+                    <li>
+                        @Html.RouteLink("BM List", new
+                                {
+                                    controller = "UnitAdmin",
+                                    action = "BMList"
+
+                                }
+                               )
+                    </li>
+                  
+                    <li>
+
+                        @Html.RouteLink("Create Event", new
+                                {
+                                    controller = "UnitAdmin",
+                                    action = "EventList"
+
+                                }
+                               )
+                    </li>
+                       <li>
+
+                        @Html.RouteLink("Monthly Event Report", new
+                                {
+                                    controller = "UnitAdmin",
+                                    action = "MonthlyEventReport"
+
+                                }
+                               )
+                    </li>
+                }
+            </ul>
+  
